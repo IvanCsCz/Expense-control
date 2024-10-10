@@ -1,9 +1,18 @@
+import BudgetForm from "./components/BudgetForm"
 
 function App() {
 
   return (
     <>
-      <h1>Control de gastos</h1>
+      <header className="bg-blue-600 py-8 max-h-72">
+        <h1 className="text-center uppercase font-black text-4xl text-white">
+          Expense control
+        </h1>
+      </header>
+
+      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg mt-10 p-10">
+        <BudgetForm />
+      </div>
     </>
   )
 }
