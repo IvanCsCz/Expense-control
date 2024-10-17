@@ -1,19 +1,58 @@
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import { categories } from "../data/categories";
-
-type ValuePiece = Date | null;
-
-type Value = ValuePiece | [ValuePiece, ValuePiece];
+import { useBudget } from '../hooks/useBudget';
+import { DraftExpense, Value } from '../type';
+import ErrorMessage from './ErrorMessage';
 
 function ExpenseForm() {
-  const [value, onChange] = useState<Value>(new Date());
+  const [expense, setExpense] = useState<DraftExpense>({
+    amount: 0,
+    expenseName: '',
+    category: '',
+    date: new Date()
+  });
+  const [error, setError] = useState('')
 
+  const {dispatch} = useBudget()
+
+  const handleChangeDate = (value: Value) => {
+    setExpense({
+      ...expense,
+      date: value
+    })
+  }
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
+    const {name, value} = e.target
+    const isAmountField = ['amount'].includes(name)
+
+    setExpense({
+      ...expense,
+      [name]: isAmountField ? Number(value) : value
+    })
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement> ) => {
+    e.preventDefault()
+
+    if(Object.values(expense).includes('') || expense.amount === 0){
+      setError('Todos los campos son obligatorios')
+      return
+    }
+
+    setError('')
+    dispatch({
+      type: 'add-expense', 
+      payload: {expense}
+    })
+    
+  }
 
   return (
-    <form className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <legend
         className="uppecase text-center text-2xl font-black border-b-4 border-blue-400 py-2"
       >Nuevo Gasto</legend>
@@ -26,6 +65,8 @@ function ExpenseForm() {
           type="text" 
           placeholder="Añade el nombre del gasto"
           className="bg-slate-100 rounded-lg p-2"
+          value={expense.expenseName}
+          onChange={handleChange}
         />
       </div>
 
@@ -37,6 +78,8 @@ function ExpenseForm() {
           type="number" 
           placeholder="Añade la cantidad del gasto"
           className="bg-slate-100 rounded-lg p-2"
+          value={expense.amount}
+          onChange={handleChange}
         />
       </div>
 
@@ -46,6 +89,8 @@ function ExpenseForm() {
           id="category" 
           name="category" 
           className="bg-slate-100 rounded-lg p-2"
+          value={expense.category}
+          onChange={handleChange}
         >
           <option value="">-- Seleccione --</option>
           {categories.map(category => (
@@ -57,7 +102,7 @@ function ExpenseForm() {
 
       <div className="flex flex-col gap-2">
         <label htmlFor="amountDate" className="text-xl">Fecha del Gasto:</label>
-        <DatePicker onChange={onChange} value={value} />
+        <DatePicker onChange={handleChangeDate} value={expense.date} />
       </div>
 
       <input 
@@ -65,7 +110,11 @@ function ExpenseForm() {
         className="bg-blue-600 cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg"
         value='Registrar Gasto'
       />
+
+      {error && <ErrorMessage message={error} />}
+
     </form>
+
   )
 }
 
