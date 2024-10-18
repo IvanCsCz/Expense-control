@@ -1,9 +1,16 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { EllipsisVerticalIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { useBudget } from '../hooks/useBudget'
 
-function DropdownMenu() {
+type DropdownMenuProps = {
+  id: string
+}
+
+function DropdownMenu({id}: DropdownMenuProps) {
+  const {dispatch} = useBudget()
+
   const handleDelete = () => {
-    console.log('handleDelete')
+    dispatch({type: 'delete-expense', payload: {id}})
   }
 
   const handleEdit = () => {

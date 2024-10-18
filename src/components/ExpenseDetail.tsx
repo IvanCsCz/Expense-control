@@ -29,7 +29,7 @@ function ExpenseDetail({expense}: ExpenseDetailProps) {
 
       <AmountDisplay amount={expense.amount}/>
 
-      <DropdownMenu />
+      <DropdownMenu id={expense.id} />
 
     </div>
   )
