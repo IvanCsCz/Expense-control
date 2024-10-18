@@ -3,6 +3,7 @@ import { categories } from "../data/categories"
 import { formatDate } from "../helpers"
 import { Expense } from "../type"
 import AmountDisplay from "./AmountDisplay"
+import DropdownMenu from "./DropdownMenu"
 
 type ExpenseDetailProps = {
   expense: Expense
@@ -12,7 +13,7 @@ function ExpenseDetail({expense}: ExpenseDetailProps) {
   const categoryInfo = useMemo(() => categories.filter(cat => cat.id === expense.category)[0] ,[expense])
 
   return (
-    <div className="bg-white shadow-lg mt-5 p-10 rounded-lg w-full border-b border-gray-200 flex gap-5 items-center ">
+    <div className="bg-white shadow-lg mt-5 py-10 px-5 rounded-lg w-full border-b border-gray-200 flex gap-5 items-center">
       <div>
         <img 
           src={`/icono_${categoryInfo.icon}.svg`}
@@ -27,6 +28,8 @@ function ExpenseDetail({expense}: ExpenseDetailProps) {
       </div>
 
       <AmountDisplay amount={expense.amount}/>
+
+      <DropdownMenu />
 
     </div>
   )
