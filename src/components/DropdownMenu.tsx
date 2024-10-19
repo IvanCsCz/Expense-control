@@ -14,7 +14,8 @@ function DropdownMenu({id}: DropdownMenuProps) {
   }
 
   const handleEdit = () => {
-    console.log('handleEdit')
+    dispatch({type: 'show-modal'})
+    dispatch({type: 'set-selectedId', payload: {selectedId: id}})
   }
 
   return (
@@ -28,16 +29,16 @@ function DropdownMenu({id}: DropdownMenuProps) {
         className=" rounded-xl border border-black bg-white p-1 text-sm/6 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
       >
         <MenuItem>
-          <button className="flex items-center gap-2 w-full rounded-lg py-1.5 px-3 data- hover:bg-blue-500 hover:text-white" onClick={handleEdit}>
-            <PencilIcon className="size-4 fill-black/50" />
-            Actualizar
+          <button className="flex items-center gap-2 w-full rounded-lg py-1.5 px-3  hover:bg-blue-500 hover:text-white" onClick={handleDelete}>
+            <TrashIcon className="size-4 fill-black/50"  />
+            Eliminar
           </button>
         </MenuItem>
         <div className="my-1 h-px bg-white/5" />
         <MenuItem>
-          <button className="flex items-center gap-2 w-full rounded-lg py-1.5 px-3  hover:bg-blue-500 hover:text-white" onClick={handleDelete}>
-            <TrashIcon className="size-4 fill-black/50"  />
-            Eliminar
+          <button className="flex items-center gap-2 w-full rounded-lg py-1.5 px-3 data- hover:bg-blue-500 hover:text-white" onClick={handleEdit}>
+            <PencilIcon className="size-4 fill-black/50" />
+            Actualizar
           </button>
         </MenuItem>
       </MenuItems>

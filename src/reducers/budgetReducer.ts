@@ -4,20 +4,34 @@ import { DraftExpense, Expense } from "../type"
 export type BudgetActions = 
 {  type: 'add-budget', payload: {budget: number} } |
 {  type: 'add-expense', payload: {expense: DraftExpense} } |
+{  type: 'update-expense', payload: {expense: Expense} } |
 {  type: 'delete-expense', payload: {id: string} } |
+{  type: 'set-selectedId', payload: {selectedId: string} } |
 {  type: 'show-modal' } |
 {  type: 'close-modal' }
 
 export type BudgetState = {
   budget: number,
   modal: boolean,
-  expenses: Expense[]
+  expenses: Expense[],
+  selectedId: string
+}
+
+const initialBudget = () : number => {
+  const localStorageBudget = localStorage.getItem('budget')
+  return localStorageBudget ? Number(localStorageBudget) : 0
+}
+
+const initialExpenses = () : Expense[] => {
+  const localStorageBudget = localStorage.getItem('expenses')
+  return localStorageBudget ? JSON.parse(localStorageBudget) : []
 }
 
 export const initialState: BudgetState = {
-  budget: 0,
+  budget: initialBudget(),
   modal: false,
-  expenses: []
+  expenses: initialExpenses(),
+  selectedId: ''
 }
 
 const createExpense = (draftExpense: DraftExpense): Expense => {
@@ -49,12 +63,38 @@ export const budgetReducer = (
     }
   }
 
+  if(action.type === 'update-expense'){
+    const filteredExpenses = state.expenses.map(expense => {
+      if(expense.id === action.payload.expense.id){
+        const newExpense = {
+          ...action.payload.expense
+        }
+        return newExpense
+      }
+      return expense
+    })
+
+    return {
+      ...state,
+      modal: false,
+      expenses: [...filteredExpenses],
+    }
+  }
+
   if(action.type === 'delete-expense'){
     const filteredExpenses = state.expenses.filter(expense => expense.id !== action.payload.id)
 
     return {
       ...state,
       expenses: [...filteredExpenses]
+    }
+  }
+
+  if(action.type === 'set-selectedId'){
+
+    return{
+      ...state,
+      selectedId: action.payload.selectedId
     }
   }
 
@@ -68,7 +108,8 @@ export const budgetReducer = (
   if(action.type === 'close-modal'){
     return{
       ...state,
-      modal: false
+      modal: false,
+      selectedId: ''
     }
   }
 

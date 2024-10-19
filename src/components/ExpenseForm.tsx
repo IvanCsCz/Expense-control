@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
@@ -16,7 +16,23 @@ function ExpenseForm() {
   });
   const [error, setError] = useState('')
 
-  const {dispatch} = useBudget()
+  const {dispatch, state} = useBudget()
+
+  const isSelectedId = useMemo(() =>  !!state.selectedId , [state.selectedId])
+
+  useEffect(() => {
+    if(isSelectedId){
+      console.log('entro')
+      const selectedExpense = state.expenses.filter(expense => expense.id === state.selectedId)[0]
+
+      setExpense({
+        amount: selectedExpense.amount,
+        expenseName: selectedExpense.expenseName,
+        category: selectedExpense.category,
+        date: new Date(`${selectedExpense.date}`)
+      })
+    }
+  },[isSelectedId, state])
 
   const handleChangeDate = (value: Value) => {
     setExpense({
@@ -44,18 +60,31 @@ function ExpenseForm() {
     }
 
     setError('')
+
+    if(state.selectedId){
+      dispatch({
+        type: 'update-expense', 
+        payload: {expense: {id: state.selectedId ,...expense}}
+      })
+      dispatch({
+        type: 'set-selectedId', 
+        payload: {selectedId: ''}
+      })
+      return
+    }
+
     dispatch({
       type: 'add-expense', 
       payload: {expense}
     })
-    
+
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <legend
         className="uppecase text-center text-2xl font-black border-b-4 border-blue-400 py-2"
-      >Nuevo Gasto</legend>
+      >{isSelectedId ? 'Actualizar Gasto' : 'Nuevo Gasto'}</legend>
 
       <div className="flex flex-col gap-2">
         <label htmlFor="expenseName" className="text-xl">Nombre Gasto:</label>
@@ -99,7 +128,6 @@ function ExpenseForm() {
         </select>
       </div>
 
-
       <div className="flex flex-col gap-2">
         <label htmlFor="amountDate" className="text-xl">Fecha del Gasto:</label>
         <DatePicker onChange={handleChangeDate} value={expense.date} />
@@ -108,7 +136,7 @@ function ExpenseForm() {
       <input 
         type="submit"
         className="bg-blue-600 cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg"
-        value='Registrar Gasto'
+        value={isSelectedId ? 'Actualizar Gasto' : 'Registrar Gasto'}
       />
 
       {error && <ErrorMessage message={error} />}
