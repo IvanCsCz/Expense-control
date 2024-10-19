@@ -7,6 +7,7 @@ export type BudgetActions =
 {  type: 'update-expense', payload: {expense: Expense} } |
 {  type: 'delete-expense', payload: {id: string} } |
 {  type: 'set-selectedId', payload: {selectedId: string} } |
+{  type: 'reset-app' } |
 {  type: 'show-modal' } |
 {  type: 'close-modal' }
 
@@ -110,6 +111,14 @@ export const budgetReducer = (
       ...state,
       modal: false,
       selectedId: ''
+    }
+  }
+
+  if(action.type === 'reset-app'){
+    return{
+      ...state,
+      budget: 0,
+      expenses: []
     }
   }
 
