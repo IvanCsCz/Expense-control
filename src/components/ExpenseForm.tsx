@@ -15,14 +15,13 @@ function ExpenseForm() {
     date: new Date()
   });
   const [error, setError] = useState('')
-
-  const {dispatch, state} = useBudget()
+  const [previoudAmount, setPreviusAmount] = useState(0)
+  const {dispatch, state, remainingBudget} = useBudget()
 
   const isSelectedId = useMemo(() =>  !!state.selectedId , [state.selectedId])
 
   useEffect(() => {
     if(isSelectedId){
-      console.log('entro')
       const selectedExpense = state.expenses.filter(expense => expense.id === state.selectedId)[0]
 
       setExpense({
@@ -31,6 +30,8 @@ function ExpenseForm() {
         category: selectedExpense.category,
         date: new Date(`${selectedExpense.date}`)
       })
+
+      setPreviusAmount(selectedExpense.amount)
     }
   },[isSelectedId, state])
 
@@ -58,6 +59,14 @@ function ExpenseForm() {
       setError('Todos los campos son obligatorios')
       return
     }
+    console.log(previoudAmount)
+    console.log((expense.amount - previoudAmount))
+    console.log(remainingBudget)
+    
+    if((expense.amount - previoudAmount) > remainingBudget){
+      setError('Presupuesto superado')
+      return
+    } 
 
     setError('')
 
