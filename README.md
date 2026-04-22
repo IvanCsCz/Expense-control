@@ -1,50 +1,69 @@
-# React + TypeScript + Vite
+# Expense Control App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple and efficient budget and expense tracker built with React, TypeScript, and Vite. This application allows users to set a budget, record expenses across various categories, and monitor their spending through a visual progress bar.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Budget Management**: Set and track your overall budget.
+- **Expense Tracking**: Add, edit, and delete expenses with details like name, amount, and date.
+- **Categorization**: Categorize expenses (e.g., Food, Health, Savings, Leisure) for better organization.
+- **Filtering**: Easily filter your expenses by category to see where your money goes.
+- **Visual Progress**: Real-time visualization of budget usage with a circular progress bar.
+- **Responsive Design**: Styled with Tailwind CSS for a modern, responsive look.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Framework**: React 18
+- **Language**: TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **State Management**: React Hooks (useContext, useReducer)
+- **Icons & UI**: Headless UI, Heroicons
+- **Progress Bar**: React Circular Progressbar
+- **Date Picking**: React Date Picker
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Follow these steps to get the project up and running locally.
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (version 18 or higher recommended)
+- npm (comes with Node.js)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd expense-control
+   ```
+
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+
+### Running the Application
+
+1. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+2. Open your browser and navigate to the address shown in your terminal (usually `http://localhost:5173`).
+
+### Building for Production
+
+To create a production-ready build, run:
+```bash
+npm run build
 ```
+The optimized files will be generated in the `dist` folder.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Scripts
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- `npm run dev`: Starts the Vite development server.
+- `npm run build`: Compiles TypeScript and builds the app for production.
+- `npm run lint`: Runs ESLint for code quality checks.
+- `npm run preview`: Previews the production build locally.
